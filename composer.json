@@ -23,7 +23,8 @@
         "php-di/slim-bridge": "^3.4",
         "slim/psr7": "^1.8",
         "rbdwllr/reallysimplejwt": "^5.0",
-        "monolog/monolog": "^3.10"
+        "monolog/monolog": "^3.10",
+        "phpmailer/phpmailer": "^7.1"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
