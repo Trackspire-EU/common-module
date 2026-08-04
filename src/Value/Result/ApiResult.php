@@ -7,6 +7,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class ApiResult
 {
+    private array $extraHeaders = [];
+
     private function __construct(
         private readonly ResultInterface $result,
         private readonly int             $statusCode,
@@ -20,6 +22,13 @@ class ApiResult
         return new self($result, $statusCode);
     }
 
+    public function withHeader(string $name, string $value): self
+    {
+        $clone = clone $this;
+        $clone->extraHeaders[$name] = $value;
+        return $clone;
+    }
+
     public function getResponse(ResponseInterface $response): ResponseInterface
     {
         $result = $this->result->toArray();
@@ -27,12 +36,18 @@ class ApiResult
 
         $response->getBody()->write(json_encode($result, JSON_THROW_ON_ERROR));
 
-        return $response
+        $response = $response
             ->withStatus($this->statusCode)
             ->withHeader('Content-Type', 'application/json')
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
             ->withHeader('Access-Control-Allow-Headers', '*')
             ->withHeader('Access-Control-Max-Age', '86400');
+
+        foreach ($this->extraHeaders as $name => $value) {
+            $response = $response->withHeader($name, $value);
+        }
+
+        return $response;
     }
 }
