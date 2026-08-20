@@ -24,8 +24,8 @@
         "slim/psr7": "^1.8",
         "rbdwllr/reallysimplejwt": "^5.0",
         "monolog/monolog": "^3.10",
-        "phpmailer/phpmailer": "^7.1",
-        "ramsey/uuid": "^4.9"
+        "ramsey/uuid": "^4.9",
+        "resend/resend-php": "^1.9"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
