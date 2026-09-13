@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Trackspire\CommonModule\Service;
 
+use DateTimeImmutable;
 use Resend;
 use Resend\Client as ResendClient;
 use Trackspire\CommonModule\Repository\EnvironmentRepository;
@@ -22,6 +23,9 @@ class MailService
 
     /** Resend dashboard template ID for the weekly report email */
     private const string TEMPLATE_WEEKLY_REPORT = 'bb90f527-f132-4d53-a230-fe973f97d940';
+
+    /** Resend dashboard template ID for the new-login-location alert email */
+    private const string TEMPLATE_NEW_LOGIN = 'REPLACE_WITH_RESEND_TEMPLATE_ID';
 
     private readonly ResendClient $resend;
 
@@ -116,6 +120,29 @@ class MailService
                 'TOP_PAGES_HTML' => $topPagesRows,
                 'TOP_SOURCES_HTML' => $topSourcesRows,
                 'DASHBOARD_URL' => $appUrl,
+            ],
+        );
+    }
+
+    public function sendNewLoginEmail(
+        string $toEmail,
+        string $ipAddress,
+        ?string $city,
+        ?string $countryCode,
+        DateTimeImmutable $loginAt,
+    ): void {
+        $location = $city !== null && $countryCode !== null
+            ? "$city, $countryCode"
+            : ($countryCode ?? 'Unknown location');
+
+        $this->sendTemplate(
+            $toEmail,
+            'New login to your Trackspire account',
+            self::TEMPLATE_NEW_LOGIN,
+            [
+                'IP_ADDRESS' => $ipAddress,
+                'LOCATION' => $location,
+                'LOGIN_TIME' => $loginAt->format(DATE_ATOM),
             ],
         );
     }
