@@ -25,7 +25,7 @@ class MailService
     private const string TEMPLATE_WEEKLY_REPORT = 'bb90f527-f132-4d53-a230-fe973f97d940';
 
     /** Resend dashboard template ID for the new-login-location alert email */
-    private const string TEMPLATE_NEW_LOGIN = 'REPLACE_WITH_RESEND_TEMPLATE_ID';
+    private const string TEMPLATE_NEW_LOGIN = '036db034-507b-46f3-9bc1-929b29f56d91';
 
     private readonly ResendClient $resend;
 
