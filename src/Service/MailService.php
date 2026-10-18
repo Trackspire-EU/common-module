@@ -83,8 +83,17 @@ class MailService
         );
     }
 
-    public function sendWeeklyReport(string $toEmail, string $siteName, string $siteDomain, array $data): void
-    {
+    /**
+     * The template declares ORG_LOGO_URL with the Trackspire logo as fallback value. It is therefore only sent for
+     * organizations that uploaded their own logo.
+     */
+    public function sendWeeklyReport(
+        string $toEmail,
+        string $siteName,
+        string $siteDomain,
+        array $data,
+        ?string $organizationLogoUrl = null,
+    ): void {
         $appUrl     = $this->envRepo->get('APP_URL', 'http://localhost:5173');
         $period     = $data['period'];
         $kpis       = $data['kpis'];
@@ -104,24 +113,25 @@ class MailService
             $topSourcesRows .= "<tr><td style='padding:6px 0;color:#374151;'>$source</td><td style='padding:6px 0;text-align:right;color:#6b7280;'>$pv</td></tr>";
         }
 
-        $this->sendTemplate(
-            $toEmail,
-            "Weekly report: $siteName",
-            self::TEMPLATE_WEEKLY_REPORT,
-            [
-                'SITE_NAME' => $siteName,
-                'SITE_DOMAIN' => $siteDomain,
-                'PERIOD_FROM' => $period['from'],
-                'PERIOD_TO' => $period['to'],
-                'PAGEVIEWS' => $kpis['pageviews'],
-                'VISITORS' => $kpis['visitors'],
-                'SESSIONS' => $kpis['sessions'],
-                'BOUNCE_RATE' => $bounceRate,
-                'TOP_PAGES_HTML' => $topPagesRows,
-                'TOP_SOURCES_HTML' => $topSourcesRows,
-                'DASHBOARD_URL' => $appUrl,
-            ],
-        );
+        $variables = [
+            'SITE_NAME' => $siteName,
+            'SITE_DOMAIN' => $siteDomain,
+            'PERIOD_FROM' => $period['from'],
+            'PERIOD_TO' => $period['to'],
+            'PAGEVIEWS' => $kpis['pageviews'],
+            'VISITORS' => $kpis['visitors'],
+            'SESSIONS' => $kpis['sessions'],
+            'BOUNCE_RATE' => $bounceRate,
+            'TOP_PAGES_HTML' => $topPagesRows,
+            'TOP_SOURCES_HTML' => $topSourcesRows,
+            'DASHBOARD_URL' => $appUrl,
+        ];
+
+        if ($organizationLogoUrl !== null) {
+            $variables['ORG_LOGO_URL'] = $organizationLogoUrl;
+        }
+
+        $this->sendTemplate($toEmail, "Weekly report: $siteName", self::TEMPLATE_WEEKLY_REPORT, $variables);
     }
 
     public function sendNewLoginEmail(
