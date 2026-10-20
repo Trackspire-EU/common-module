@@ -18,6 +18,7 @@ class SiteTrackingConfig
         public readonly bool $trackButtonClicks,
         public readonly bool $trackCopy,
         public readonly bool $trackFormInteractions,
+        public readonly bool $trackHeatmap,
         public readonly bool $saltUserIds,
     ) {
     }
@@ -36,6 +37,7 @@ class SiteTrackingConfig
             trackButtonClicks:     false,
             trackCopy:             false,
             trackFormInteractions: false,
+            trackHeatmap:          false,
             saltUserIds:           false,
         );
     }
@@ -54,6 +56,7 @@ class SiteTrackingConfig
             trackButtonClicks:     (bool) $row['track_button_clicks'],
             trackCopy:             (bool) $row['track_copy'],
             trackFormInteractions: (bool) $row['track_form_interactions'],
+            trackHeatmap:          (bool) ($row['track_heatmap'] ?? false),
             saltUserIds:           (bool) ($row['salt_user_ids'] ?? false),
         );
     }
@@ -72,6 +75,7 @@ class SiteTrackingConfig
             'trackButtonClicks'     => $this->trackButtonClicks,
             'trackCopy'             => $this->trackCopy,
             'trackFormInteractions' => $this->trackFormInteractions,
+            'trackHeatmap'          => $this->trackHeatmap,
             'saltUserIds'           => $this->saltUserIds,
         ];
     }
@@ -90,6 +94,7 @@ class SiteTrackingConfig
             'track_button_clicks'     => (int) $this->trackButtonClicks,
             'track_copy'              => (int) $this->trackCopy,
             'track_form_interactions' => (int) $this->trackFormInteractions,
+            'track_heatmap'           => (int) $this->trackHeatmap,
             'salt_user_ids'           => (int) $this->saltUserIds,
         ];
     }
