@@ -41,4 +41,10 @@ class SiteDomain
     {
         return $this->domain;
     }
+
+    /** True for the domain itself and every subdomain of it. The host has to be lower case already. */
+    public function isHostOf(string $host): bool
+    {
+        return $host === $this->domain || str_ends_with($host, '.' . $this->domain);
+    }
 }
