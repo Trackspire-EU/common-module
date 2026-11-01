@@ -120,7 +120,8 @@ class MailService
             'PERIOD_TO' => $period['to'],
             'PAGEVIEWS' => $kpis['pageviews'],
             'VISITORS' => $kpis['visitors'],
-            'SESSIONS' => $kpis['sessions'],
+            // Resend checks values against the type declared in the template, which is `string` for this variable.
+            'SESSIONS' => (string) $kpis['sessions'],
             'BOUNCE_RATE' => $bounceRate,
             'TOP_PAGES_HTML' => $topPagesRows,
             'TOP_SOURCES_HTML' => $topSourcesRows,
